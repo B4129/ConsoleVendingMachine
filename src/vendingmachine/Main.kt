@@ -1,4 +1,4 @@
-package com.example.vendingmachine
+package vendingmachine
 
 
 import com.example.vendingmachine.announce.Announce

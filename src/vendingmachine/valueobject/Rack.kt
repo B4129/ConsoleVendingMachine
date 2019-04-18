@@ -2,6 +2,8 @@ package com.example.vendingmachine.valueobject
 
 import com.example.vendingmachine.valueobject.drink.*
 import com.example.vendingmachine.valueobject.money.Storage
+import vendingmachine.valueobject.drink.Amount
+import vendingmachine.valueobject.drink.Price
 
 class Rack {
     val storage = Storage()

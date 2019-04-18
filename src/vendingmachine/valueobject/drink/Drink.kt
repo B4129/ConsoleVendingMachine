@@ -1,5 +1,8 @@
 package com.example.vendingmachine.valueobject.drink
 
+import vendingmachine.valueobject.drink.Amount
+import vendingmachine.valueobject.drink.Price
+
 class Drink(
     override val status: Status,
     override val name: Name,
