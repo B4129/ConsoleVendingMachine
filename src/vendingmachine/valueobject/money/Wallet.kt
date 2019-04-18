@@ -2,18 +2,23 @@ package com.example.vendingmachine.valueobject.money
 
 
 class Wallet(
-    override val coins: MutableList<Pair<Coin, Int>> = mutableListOf(
-        Pair(Coin(10), 0),
-        Pair(Coin(50), 0),
-        Pair(Coin(100), 0),
-        Pair(Coin(500), 0)
+    override val coins: MutableMap<Coin, Int> = mutableMapOf(
+        Coin(10) to 0,
+        Coin(50) to 0,
+        Coin(100) to 0,
+        Coin(500) to 0
     ),
-    override val bills: MutableList<Pair<Bill, Int>> = mutableListOf(
-        Pair(Bill(1000), 0),
-        Pair(Bill(5000), 0),
-        Pair(Bill(10000), 0)
-    ),
-    val grade: Int = 0
-) : IStorage {
+    override val bills:  MutableMap<Bill, Int> = mutableMapOf(
+        Bill(1000) to 0,
+        Bill(5000) to 0,
+        Bill(10000) to 0
+    )
 
+) : IStorage {
+    override fun sum(): Int {
+        var sum = 0
+        coins.forEach { coin ->
+            sum += coin.key.toInt() * coin.value }
+        return sum
+    }
 }

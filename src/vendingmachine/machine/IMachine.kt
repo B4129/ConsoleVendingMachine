@@ -1,7 +1,5 @@
 package com.example.vendingmachine.machine
 
-import com.example.vendingmachine.valueobject.money.IMoney
-
 
 interface IMachine {
     fun receiveMoney(money: Any)

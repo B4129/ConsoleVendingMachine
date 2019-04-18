@@ -10,10 +10,10 @@ import com.example.vendingmachine.valueobject.money.Frog
 import com.example.vendingmachine.valueobject.money.Wallet
 
 fun main() {
-     val announce = Announce()
-     val wallet = Wallet()
-     val machine = Machine()
-     val human = Human(wallet)
+    val announce = Announce()
+    val wallet = Wallet()
+    val machine = Machine()
+    val human = Human(wallet)
     announce.say("お金を投入してください")
     announce.say("(お金の種類 1:硬貨 2:紙幣) :")
     //コンソールで数字を入力する
@@ -21,12 +21,15 @@ fun main() {
     announce.say("金額 : ")
     val selectValue = readLine()!!.toInt()
 
-    val insertItem = when (selectNumber) {
-        1 -> Bill(selectValue)
-        2 -> Coin(selectValue)
-        else -> Frog("アマガエル")
-    }
-    machine.insertMoney(insertItem)
+    machine.insertMoney(
+        when (selectNumber) {
+            1 -> Bill(selectValue)
+            2 -> Coin(selectValue)
+            else -> Frog("アマガエル")
+        }
+    )
+
+
 
 
     announce.say("商品を選んでください")

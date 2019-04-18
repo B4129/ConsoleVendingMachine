@@ -1,9 +1,6 @@
 package com.example.vendingmachine.valueobject.money
 
 class Bill(value: Int):IMoney {
-    override fun countMoney(money: IMoney) {
-
-    }
 
     override val valueArrayList:MutableList<Int> = mutableListOf(1000,5000,10000)
     override val yen:Int = value
@@ -12,7 +9,7 @@ class Bill(value: Int):IMoney {
     }
 
 
-    fun toInt(): Int {
+    override fun toInt(): Int {
         return yen
     }
 }
