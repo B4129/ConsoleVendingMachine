@@ -7,7 +7,7 @@ class Coin(value: Int) : IMoney {
 
     init {
 
-        //if (value !in valueArrayList) throw IllegalArgumentException()
+        require(value !in valueArrayList){"存在しない硬貨です"}
     }
 
 

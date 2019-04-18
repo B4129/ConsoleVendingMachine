@@ -6,6 +6,6 @@ class Status(
     private val temperature:String
 ) {
     init {
-        //if(temperature != "HOT" && temperature != "COOL" )throw IllegalArgumentException("温度異常")
+        require(temperature != "HOT" && temperature != "COOL" ){"温度異常"}
     }
 }

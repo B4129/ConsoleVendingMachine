@@ -5,6 +5,6 @@ package com.example.vendingmachine.valueobject.drink
 class Size(private val value: Int) {
 
     init {
-        //if (value != 350 or 500) throw IllegalArgumentException("サイズ異常")
+        require(value != 350 or 500) {"サイズ異常"}
     }
 }
