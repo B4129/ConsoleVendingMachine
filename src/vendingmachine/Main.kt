@@ -18,9 +18,11 @@ fun main() {
     announce.say("(お金の種類 1:硬貨 2:紙幣) :")
     //コンソールで数字を入力する
     val selectNumber = readLine()!!.toInt()
-    announce.say("金額 : ")
-    val selectValue = readLine()!!.toInt()
-
+    var selectValue = 0
+    if (selectNumber == 1 || selectNumber == 2) {
+        announce.say("金額 : ")
+        selectValue = readLine()!!.toInt()
+    }
     machine.insertMoney(
         when (selectNumber) {
             1 -> Bill(selectValue)
@@ -29,12 +31,9 @@ fun main() {
         }
     )
 
-
-
-
     announce.say("商品を選んでください")
     val selectItem = readLine()!!.toInt()
-    announce.say("商品番号 : ")
+    announce.say("商品番号 :$selectItem")
     //商品選ぶ処理
     //購入の場合
     //ユーザが商品の購入を行う

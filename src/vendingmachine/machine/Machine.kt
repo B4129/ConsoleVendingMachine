@@ -15,6 +15,7 @@ class Machine : IMachine {
 
     override fun countMoney(money: Any) {
         if (isCheckMoney(money)) {
+            announce.say("お金を投入しました")
             announce.say("投入金額:${(money as IMoney).yen}")
             announce.say("合計金額:${storage.sum()}")
         }
@@ -27,34 +28,30 @@ class Machine : IMachine {
 
     override fun receiveMoney(money: Any) {
         countMoney(money)
+        registerMoney(money as IMoney)
         onButtonLight()
     }
 
-    private fun registerCoin(money: Coin) {
-        //対応するコインのvalueを1増やす
-        //storage.also { it.coins. += 1 }
-    }
-
-    private fun registerBill(money: Bill) {
-        //対応するコインのvalueを1増やす
-        //storage.also { it.bills.keys(money)] += 1 }
+    private fun registerMoney(money: IMoney) {
+        if (money is Coin) storage.also { it.coins.values += 1 }
+        if (money is Bill) storage.also { it.bills.values += 1 }
     }
 
     private fun isCheckMoney(money: Any): Boolean {
         if (money is Coin) {
-            registerCoin(money)
+            registerMoney(money)
             return true
         }
         if (money is Bill) {
-            registerBill(money)
+            registerMoney(money)
             return true
         }
-        if (money is Frog)  {
+        if (money is Frog) {
             announce.say("投入口に${money.name}が詰まってしまいました")
             return false
         }
-            announce.say("正しい通貨を入れて下さい")
-            return false
+        announce.say("正しい通貨を入れて下さい")
+        return false
     }
 
 
