@@ -1,5 +1,7 @@
 package com.example.vendingmachine.machine
 
+import com.example.vendingmachine.valueobject.money.IMoney
+
 
 interface IMachine {
     fun receiveMoney(money: Any)
@@ -7,6 +9,6 @@ interface IMachine {
     fun onButtonLight()
     fun offButtonLight()
     fun onButtonClick(buttonNumber: Int)
-    fun countMoney(money: Any)
     fun insertMoney(money: Any)
+    fun countMoney(money: Any)
 }

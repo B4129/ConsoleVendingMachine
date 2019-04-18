@@ -1,6 +1,7 @@
 package com.example.vendingmachine.valueobject.money
 
 interface IStorage {
-    val coins: MutableList<Pair<Coin, Int>>
-    val bills: MutableList<Pair<Bill, Int>>
+    val coins: MutableMap<Coin, Int>
+    val bills: MutableMap<Bill, Int>
+    fun sum(): Int
 }
