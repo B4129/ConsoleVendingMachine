@@ -1,4 +1,8 @@
-package com.example.vendingmachine.valueobject.money
+package vendingmachine.valueobject.wallet
+
+import com.example.vendingmachine.valueobject.money.Bill
+import com.example.vendingmachine.valueobject.money.IStorage
+import vendingmachine.valueobject.money.Coin
 
 
 class Storage(
@@ -15,10 +19,10 @@ class Storage(
     )
 
 ) : IStorage {
-    override fun sum(): Int {
+    override fun sumValue(): Int {
         var sum = 0
-        coins.forEach { coin ->
-             sum += coin.key.toInt() * coin.value }
+        coins.forEach { coin -> sum += coin.key.yen * coin.value }
+        bills.forEach { bill -> sum += bill.key.yen * bill.value }
         return sum
     }
 }

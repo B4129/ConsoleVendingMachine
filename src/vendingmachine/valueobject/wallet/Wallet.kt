@@ -1,5 +1,7 @@
 package com.example.vendingmachine.valueobject.money
 
+import vendingmachine.valueobject.money.Coin
+
 
 class Wallet(
     override val coins: MutableMap<Coin, Int> = mutableMapOf(
@@ -15,10 +17,10 @@ class Wallet(
     )
 
 ) : IStorage {
-    override fun sum(): Int {
+    override fun sumValue(): Int {
         var sum = 0
-        coins.forEach { coin ->
-            sum += coin.key.toInt() * coin.value }
+        coins.forEach { coin, value -> sum += coin.yen * value }
+        bills.forEach { bill, value -> sum += bill.yen * value }
         return sum
     }
 }

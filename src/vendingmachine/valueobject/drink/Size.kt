@@ -1,10 +1,10 @@
-package com.example.vendingmachine.valueobject.drink
+package vendingmachine.valueobject.drink
 
 
 
-class Size(private val value: Int) {
+class Size(value: Int = 350)  {
 
     init {
-        require(value != 350 or 500) {"サイズ異常"}
+        require(value == 350 || value == 500) {"サイズ異常"}
     }
 }

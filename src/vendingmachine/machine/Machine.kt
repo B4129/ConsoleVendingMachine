@@ -3,13 +3,13 @@ package com.example.vendingmachine.machine
 import com.example.vendingmachine.announce.Announce
 import com.example.vendingmachine.valueobject.Rack
 import com.example.vendingmachine.valueobject.money.*
-import kotlin.math.absoluteValue
-import kotlin.test.todo
+import vendingmachine.valueobject.money.Coin
+import vendingmachine.valueobject.wallet.Storage
 
 class Machine : IMachine {
 
     val rack = Rack()
-    val storage = Storage()
+    private val storage = Storage()
     // TODO: 2019/04/18 Sakai_Yuji 多分良くない
     private val announce = Announce()
 
@@ -17,7 +17,7 @@ class Machine : IMachine {
         if (isCheckMoney(money)) {
             announce.say("お金を投入しました")
             announce.say("投入金額:${(money as IMoney).yen}")
-            announce.say("合計金額:${storage.sum()}")
+            announce.say("合計金額:${storage.sumValue()}")
         }
 
     }
@@ -33,8 +33,9 @@ class Machine : IMachine {
     }
 
     private fun registerMoney(money: IMoney) {
-        if (money is Coin) storage.also { it.coins.values += 1 }
-        if (money is Bill) storage.also { it.bills.values += 1 }
+        if (money is Coin) storage.coins[Coin(money.yen)]?.plus(1)
+
+        if (money is Bill) storage.bills[Bill(money.yen)]?.plus(1)
     }
 
     private fun isCheckMoney(money: Any): Boolean {

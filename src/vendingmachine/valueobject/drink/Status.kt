@@ -1,4 +1,4 @@
-package com.example.vendingmachine.valueobject.drink
+package vendingmachine.valueobject.drink
 
 
 class Status(
@@ -6,6 +6,6 @@ class Status(
     private val temperature:String
 ) {
     init {
-        require(temperature != "HOT" && temperature != "COOL" ){"温度異常"}
+        require(temperature == "HOT" || temperature == "COOL" ){"温度異常"}
     }
 }

@@ -2,6 +2,8 @@ package com.example.vendingmachine.valueobject.drink
 
 import vendingmachine.valueobject.drink.Amount
 import vendingmachine.valueobject.drink.Price
+import vendingmachine.valueobject.drink.Size
+import vendingmachine.valueobject.drink.Status
 
 class Drink(
     override val status: Status,

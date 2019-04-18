@@ -1,10 +1,6 @@
 package com.example.vendingmachine.human
 
-import com.example.vendingmachine.machine.Machine
 import com.example.vendingmachine.valueobject.drink.IDrink
-import com.example.vendingmachine.valueobject.money.Bill
-import com.example.vendingmachine.valueobject.money.Coin
-import com.example.vendingmachine.valueobject.money.IMoney
 import com.example.vendingmachine.valueobject.money.Wallet
 
 class Human(
