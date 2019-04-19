@@ -1,8 +1,9 @@
 package vendingmachine.valueobject.drink
 
 
-class Amount(value: Int) {
+class Amount(amount: Int) {
     init {
-        require(value >= 0) { "在庫数が異常です" }
+        require(amount >= 0) { "在庫数が異常です" }
     }
+    val value = amount
 }
