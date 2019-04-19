@@ -1,9 +1,6 @@
 package com.example.vendingmachine.valueobject.drink
 
-import vendingmachine.valueobject.drink.Amount
-import vendingmachine.valueobject.drink.Price
-import vendingmachine.valueobject.drink.Size
-import vendingmachine.valueobject.drink.Status
+import vendingmachine.valueobject.drink.*
 
 interface IDrink {
     val status: Status

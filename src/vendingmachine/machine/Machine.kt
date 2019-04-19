@@ -8,7 +8,7 @@ import vendingmachine.valueobject.wallet.Storage
 
 class Machine : IMachine {
 
-    val rack = Rack()
+    private val rack = Rack()
     private val storage = Storage()
     // TODO: 2019/04/18 Sakai_Yuji 多分良くない
     private val announce = Announce()
@@ -28,14 +28,13 @@ class Machine : IMachine {
 
     override fun receiveMoney(money: Any) {
         countMoney(money)
-        registerMoney(money as IMoney)
+        registerMoney(money)
         onButtonLight()
     }
 
-    private fun registerMoney(money: IMoney) {
-        if (money is Coin) storage.coins[Coin(money.yen)]?.plus(1)
-
-        if (money is Bill) storage.bills[Bill(money.yen)]?.plus(1)
+    private fun registerMoney(money: Any) {
+        if (money is Coin) storage.coins.coinList[money.yen] = 1
+        if (money is Bill) storage.bills.billList[money.yen] = 1
     }
 
     private fun isCheckMoney(money: Any): Boolean {
@@ -61,12 +60,17 @@ class Machine : IMachine {
     }
 
     override fun onButtonLight() {
-        //Storage内の金額より低い金額の商品のライトを点灯
-        announce.say(" のライトが点灯しました")
+        val rightOnDrinks = rack.drinks
+        rightOnDrinks.forEach { drink ->
+            if (drink.third.price.value <= storage.sumValue()) {
+                announce.say(" ${drink.third.name.string}のライトが点灯しました")
+            }
+        }
+
     }
 
     override fun offButtonLight() {
-        announce.say(" のライトが消灯しました")
+        announce.say("ライトが消灯しました")
     }
 
 

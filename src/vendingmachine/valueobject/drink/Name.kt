@@ -1,3 +1,5 @@
-package com.example.vendingmachine.valueobject.drink
+package vendingmachine.valueobject.drink
 
-class Name(private val name: String)
+class Name(private val name: String){
+    val string = name
+}
