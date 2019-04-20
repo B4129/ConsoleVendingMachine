@@ -1,6 +1,7 @@
-package com.example.vendingmachine.valueobject.drink
+package vendingmachine.valueobject.drink
 
-import vendingmachine.valueobject.drink.*
+import com.example.vendingmachine.valueobject.drink.IDrink
+import com.example.vendingmachine.valueobject.drink.Type
 
 class Drink(
     override val status: Status,
@@ -8,5 +9,5 @@ class Drink(
     override val price: Price,
     override val amount: Amount,
     override val size: Size,
-    override val type:Type
-):IDrink
+    override val type: Type
+): IDrink

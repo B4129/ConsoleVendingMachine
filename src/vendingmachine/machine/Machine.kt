@@ -3,7 +3,7 @@ package vendingmachine.machine
 import com.example.vendingmachine.announce.Announce
 import com.example.vendingmachine.machine.Calculator
 import com.example.vendingmachine.machine.IMachine
-import com.example.vendingmachine.valueobject.drink.Drink
+import vendingmachine.valueobject.drink.Drink
 import vendingmachine.valueobject.Rack
 
 class Machine : IMachine {
