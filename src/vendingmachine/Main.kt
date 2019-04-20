@@ -3,7 +3,7 @@ package vendingmachine
 
 import com.example.vendingmachine.announce.Announce
 import com.example.vendingmachine.human.Human
-import com.example.vendingmachine.machine.Machine
+import vendingmachine.machine.Machine
 import com.example.vendingmachine.valueobject.money.Bill
 import vendingmachine.valueobject.money.Coin
 import com.example.vendingmachine.valueobject.money.Frog
@@ -32,19 +32,8 @@ fun main() {
             else -> isEnd = !isEnd
         }
     }
-    var isFoundButton: Boolean
+    machine.selectItem()
 
-    while (true) {
-        announce.say("商品を選んでください")
-        announce.say("商品の場所(行) :")
-        val selectRow = readLine()!!.toInt()
-        announce.say("商品の場所(列) :")
-        val selectColumn = readLine()!!.toInt()
-
-        isFoundButton = machine.buttonExist(selectRow,selectColumn)
-        if (!isFoundButton) return
-        machine.onButtonClick()
-    }
 
 
 

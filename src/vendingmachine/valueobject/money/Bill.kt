@@ -9,6 +9,7 @@ class Bill(value: Int):IMoney {
     }
 
 
+
     override fun toInt(): Int {
         return yen
     }

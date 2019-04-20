@@ -1,16 +1,15 @@
-package com.example.vendingmachine.machine
+package vendingmachine.machine
 
 import com.example.vendingmachine.announce.Announce
+import com.example.vendingmachine.machine.Calculator
+import com.example.vendingmachine.machine.IMachine
 import com.example.vendingmachine.valueobject.drink.Drink
 import vendingmachine.valueobject.Rack
-import com.example.vendingmachine.valueobject.money.*
-import vendingmachine.valueobject.money.Coin
-import vendingmachine.valueobject.wallet.Storage
 
 class Machine : IMachine {
 
     private val rack = Rack()
-    // TODO: 2019/04/18 Sakai_Yuji 多分良くない
+    // TODO: 2019/04/18  多分良くない
     private val announce = Announce()
     override val calculator = Calculator()
     private var selectDrink: Drink? = null
@@ -18,8 +17,8 @@ class Machine : IMachine {
     override fun onButtonLight() {
         val rightOnDrinks = rack.drinks
         rightOnDrinks.forEach { drink ->
-            if (drink.third.price.value <= calculator.storage.sumValue()) {
-                announce.say(" ${drink.third.name.string}のライトが点灯しました")
+            if (drink.drink.price.value <= calculator.storage.sumValue()) {
+                announce.say(" ${drink.drink.name.string}のライトが点灯しました")
             }
         }
 
@@ -52,8 +51,8 @@ class Machine : IMachine {
 
     private fun changeStock(): Boolean {
         rack.drinks.forEach { item ->
-            if (item.third == selectDrink) {
-                minusStock(item.third)
+            if (item.drink == selectDrink) {
+                minusStock(item.drink)
                 return@forEach
             }
         }
@@ -64,10 +63,10 @@ class Machine : IMachine {
         drink.price.value - 1
     }
 
-    fun buttonExist(row: Int, column: Int): Boolean {
+    fun buttonExist(selectPosition:Int): Boolean {
         rack.drinks.forEach { item ->
-            if (row == item.first && column == item.second) {
-                selectDrink = item.third
+            if (item.position.number == selectPosition) {
+                selectDrink = item.drink
                 return true
             }
         }
@@ -75,5 +74,20 @@ class Machine : IMachine {
         return false
     }
 
+    fun selectItem(){
+        var isFoundButton:Boolean
+        while (true) {
+            announce.say("商品を選んでください")
 
+            for (drink in rack.drinks) {
+                announce.say("${drink.drink.name.string} 番号:${drink.position.number}")
+            }
+            val selectPositionNumber = readLine()!!.toInt()
+
+            isFoundButton =  buttonExist(selectPositionNumber)
+
+            if (!isFoundButton) return
+            onButtonClick()
+        }
+    }
 }

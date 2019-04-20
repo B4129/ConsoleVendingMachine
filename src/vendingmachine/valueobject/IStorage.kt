@@ -5,7 +5,7 @@ import vendingmachine.valueobject.money.Coin
 import vendingmachine.valueobject.money.Coins
 
 interface IStorage {
-    val coins: Coins
-    val bills: Bills
+    val coinl: Coins
+    val billl: Bills
     fun sumValue(): Int
 }

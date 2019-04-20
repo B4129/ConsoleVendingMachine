@@ -1,7 +1,6 @@
 package com.example.vendingmachine.machine
 
 import com.example.vendingmachine.announce.Announce
-import vendingmachine.valueobject.Rack
 import com.example.vendingmachine.valueobject.money.*
 import vendingmachine.valueobject.money.Coin
 import vendingmachine.valueobject.wallet.Storage
@@ -9,6 +8,7 @@ import vendingmachine.valueobject.wallet.Storage
 class Calculator {
 
     val storage = Storage()
+    val thisTimeStorage = Storage()
     // TODO: 2019/04/18 Sakai_Yuji 多分良くない
     private val announce = Announce()
 
@@ -30,8 +30,15 @@ class Calculator {
     }
 
     private fun registerMoney(money: Any) {
-        if (money is Coin) storage.coins.coinList[money.yen] = 1
-        if (money is Bill) storage.bills.billList[money.yen] = 1
+        if (money is Coin) {
+            //追加しないといけない
+            storage.coinl.coinList["${money.yen}"] = 1
+            thisTimeStorage.coinl.coinList["${money.yen}"] = 1
+        }
+        if (money is Bill) {
+            storage.bills.billList["${money.yen}"] = 1
+            thisTimeStorage.bills.billList["${money.yen}"] = 1
+        }
     }
 
     private fun isCheckMoney(money: Any): Boolean {
@@ -55,29 +62,43 @@ class Calculator {
         val outMoney = storage.sumValue() - drinkPrice
 
 
-        putBillFromStrage(drinkPrice)
-        putCoinFromStrage(drinkPrice)
-
+        putBillFromStorage(drinkPrice)
+        putCoinFromStorage(drinkPrice)
+        destroyThisMoney()
         return outMoney
     }
 
+    private fun destroyThisMoney() {
+        thisTimeStorage.coinl.coinList.values.clear()
+    }
 
-    private fun putBillFromStrage(drinkPrice: Int) {
-        val coinList = storage.coins.coinList
-        val keys = coinList.keys
-        for (number in storage.bills.billList.size downTo 1) {
-            if (number == 0) return
-            if (keys[number - 1].toInt / drinkPrice >= 1)
-                storage.bills.billList[number - 1]!! - 1
+
+    private fun putBillFromStorage(drinkPrice: Int) {
+        val billList = storage.bills.list
+        val putSumMoney = thisTimeStorage.sumValue() - drinkPrice
+
+        billList.forEach { bill ->
+            if(billList[bill.key]!! <= 0){
+                announce.say("${billList[bill.key]}は機械の中に存在しないのでお釣りは没収します")
+                return@forEach
+            }
+            if (putSumMoney / bill.key.toInt() >= 1){
+
+                billList[bill.key]!!.minus(  1)
+                print(1)
+            }
         }
     }
 
-    private fun putCoinFromStrage(drinkPrice: Int) {
-        val coinList = storage.coins.coinList
+    private fun putCoinFromStorage(drinkPrice: Int) {
+        val coinList = storage.coinl.coinList
+        val keys = coinList.keys
         for (number in coinList.size downTo 1) {
             if (number == 0) return
-            if (coinList[number - 1]!! / drinkPrice >= 1)
-                coinList[number - 1]!! - 1
+//            if (keys.first { it == coinList[number - 1] } / storage.sumValue() >= 1)
+//                coinList[number - 1]!! - 1
         }
     }
+
+
 }
