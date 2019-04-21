@@ -1,8 +1,7 @@
 package vendingmachine.machine
 
 import com.example.vendingmachine.announce.Announce
-import com.example.vendingmachine.machine.Calculator
-import com.example.vendingmachine.machine.IMachine
+import vendingmachine.IMachine
 import vendingmachine.valueobject.drink.Drink
 import vendingmachine.valueobject.Rack
 
@@ -29,41 +28,43 @@ class Machine : IMachine {
     }
 
 
-    override fun onButtonClick() {
+    override fun onButtonClick(): Boolean {
         offButtonLight()
         if (calculator.storage.sumValue() < selectDrink!!.price.value) {
             announce.say("金額が不足しています")
-            return
+            return false
         }
-        //商品を出す
-        putDrink()
         //在庫処理
-        changeStock()
-        //お釣りを出す
-        calculator.outputMoney(selectDrink!!.price.value)
-
-
+        if (changeStock()) {
+            //お釣りを出す
+            val outputMoney = calculator.outputMoney(selectDrink!!.price.value)
+            announce.say("${outputMoney}円が吐き出されました")
+            return true
+        }
+        return false
     }
 
-    private fun putDrink() {
-        announce.say("${selectDrink!!.name.string}が購入できました")
-    }
 
     private fun changeStock(): Boolean {
         rack.drinks.forEach { item ->
             if (item.drink == selectDrink) {
-                minusStock(item.drink)
-                return@forEach
+                return minusStock(item.drink)
             }
         }
         return false
     }
 
-    private fun minusStock(drink: Drink) {
+    private fun minusStock(drink: Drink): Boolean {
+        if (drink.price.value <= 0) {
+            announce.say("在庫はないので商品は吐き出しませんでした")
+            return false
+        }
         drink.price.value - 1
+        announce.say("${selectDrink!!.name.string}が購入できました")
+        return true
     }
 
-    fun buttonExist(selectPosition:Int): Boolean {
+    private fun buttonExist(selectPosition: Int): Boolean {
         rack.drinks.forEach { item ->
             if (item.position.number == selectPosition) {
                 selectDrink = item.drink
@@ -74,8 +75,8 @@ class Machine : IMachine {
         return false
     }
 
-    fun selectItem(){
-        var isFoundButton:Boolean
+    fun selectItem() {
+        var isFoundButton: Boolean
         while (true) {
             announce.say("商品を選んでください")
 
@@ -84,10 +85,10 @@ class Machine : IMachine {
             }
             val selectPositionNumber = readLine()!!.toInt()
 
-            isFoundButton =  buttonExist(selectPositionNumber)
+            isFoundButton = buttonExist(selectPositionNumber)
 
             if (!isFoundButton) return
-            onButtonClick()
+            if (onButtonClick()) return
         }
     }
 }

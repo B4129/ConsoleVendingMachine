@@ -1,9 +1,11 @@
-package com.example.vendingmachine.machine
+package vendingmachine
+
+import vendingmachine.machine.Calculator
 
 
 interface IMachine {
-    val calculator:Calculator
+    val calculator: Calculator
     fun onButtonLight()
     fun offButtonLight()
-    fun onButtonClick()
+    fun onButtonClick():Boolean
 }

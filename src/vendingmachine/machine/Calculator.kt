@@ -1,4 +1,4 @@
-package com.example.vendingmachine.machine
+package vendingmachine.machine
 
 import com.example.vendingmachine.announce.Announce
 import com.example.vendingmachine.valueobject.money.*
@@ -14,6 +14,7 @@ class Calculator {
 
     private fun countMoney(money: Any) {
         if (isCheckMoney(money)) {
+            register(money)
             announce.say("お金を投入しました")
             announce.say("投入金額:${(money as IMoney).yen}")
             announce.say("合計金額:${thisTimeStorage.sumValue()}")
@@ -26,29 +27,31 @@ class Calculator {
 
     private fun receiveMoney(money: Any) {
         countMoney(money)
-        registerMoney(money)
+
     }
 
-    private fun registerMoney(money: Any) {
-        if (money is Coin) {
-            val yen = money.yen
-            storage.coinl.coinList["$yen"] = 1
-            thisTimeStorage.coinl.coinList["$yen"] = 1
-        }
-        if (money is Bill) {
-            val yen = money.yen
-            storage.bills.billList["$yen"] = 1
-            thisTimeStorage.bills.billList["$yen"] = 1
+    private fun register(money: Any) {
+        when (money) {
+            is Coin -> {
+                val yen = money.yen
+                val insertMoney = thisTimeStorage.coins.list["$yen"]!!
+                storage.coins.list["$yen"] = insertMoney + 1
+                thisTimeStorage.coins.list["$yen"] = insertMoney + 1
+            }
+            is Bill -> {
+                val yen = money.yen
+                val insertMoney = thisTimeStorage.bills.list["$yen"]
+                storage.bills.list["$yen"] = insertMoney!! + 1
+                thisTimeStorage.bills.list["$yen"] = insertMoney + 1
+            }
         }
     }
 
     private fun isCheckMoney(money: Any): Boolean {
         if (money is Coin) {
-            registerMoney(money)
             return true
         }
         if (money is Bill) {
-            registerMoney(money)
             return true
         }
         if (money is Frog) {
@@ -67,7 +70,7 @@ class Calculator {
     }
 
     private fun destroyThisMoney() {
-        thisTimeStorage.coinl.coinList.values.clear()
+        thisTimeStorage.coins.list.values.clear()
     }
 
     private fun putMoneyFromStorage(drinkPrice: Int) {
@@ -79,13 +82,20 @@ class Calculator {
 
     private fun putFromStorage(drinkPrice: Int, moneyList: MutableMap<String, Int>) {
         val putSumMoney = thisTimeStorage.sumValue() - drinkPrice
-
+        var yen:String
         moneyList.forEach {
-            if (moneyList[it.key]!! <= 0) {
-                announce.say("${moneyList[it.key]}円は機械の中に存在しません")
-                return@forEach
+            yen = it.key
+            //機械内にお釣りとなる紙幣/硬貨が存在する場合大きいものから出す
+            while(true){
+                if (yen.toInt() <= 0) {
+                    announce.say("${yen}円は機械の中に存在しません")
+                    break
+                }
+                val putMoney = moneyList[yen]
+                if (putSumMoney / yen.toInt() >= 1) moneyList[yen] = putMoney!! -  1
             }
-            if (putSumMoney / it.key.toInt() >= 1) moneyList[it.key]!!.minus(1)
+
+
         }
     }
 }
