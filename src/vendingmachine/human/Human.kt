@@ -1,6 +1,6 @@
-package com.example.vendingmachine.human
+package vendingmachine.human
 
-import com.example.vendingmachine.valueobject.drink.IDrink
+import vendingmachine.valueobject.IDrink
 import com.example.vendingmachine.valueobject.money.Wallet
 
 class Human(

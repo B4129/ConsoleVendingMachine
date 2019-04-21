@@ -8,8 +8,8 @@ class Storage(
     override val coinl: Coins = Coins(),
     override val billl: Bills = Bills()
     ) : IStorage {
-    var coins = coinl
-    var bills = billl
+    val coins = coinl
+    val bills = billl
     private var sum: Int = 0
     override fun sumValue(): Int {
         sum = 0

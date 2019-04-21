@@ -1,7 +1,8 @@
 package vendingmachine.machine
 
-import com.example.vendingmachine.announce.Announce
+import vendingmachine.announce.Announce
 import com.example.vendingmachine.valueobject.money.*
+import vendingmachine.flog.FlogStack
 import vendingmachine.valueobject.money.Coin
 import vendingmachine.valueobject.wallet.Storage
 
@@ -9,6 +10,7 @@ class Calculator {
 
     val storage = Storage()
     val thisTimeStorage = Storage()
+    val flogStack = FlogStack()
     // TODO: 2019/04/18 Sakai_Yuji 多分良くない
     private val announce = Announce()
 
@@ -56,6 +58,7 @@ class Calculator {
         }
         if (money is Frog) {
             announce.say("投入口に${money.name}が詰まってしまいました")
+            flogStack.isStackFlag = true
             return false
         }
         announce.say("正しい通貨を入れて下さい")

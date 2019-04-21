@@ -1,4 +1,4 @@
-package com.example.vendingmachine.announce
+package vendingmachine.announce
 
 
 

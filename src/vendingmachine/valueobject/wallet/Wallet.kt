@@ -11,8 +11,8 @@ class Wallet(
 ) : IStorage {
     private var sum: Int = 0
     override fun sumValue(): Int {
-        var coins = coinl
-        var bills = billl
+        val coins = coinl
+        val bills = billl
          sum = 0
         coinl.coinList.forEach { coin -> sum += coin.key.toInt() * coin.value }
         billl.billList.forEach { bill -> sum += bill.key.toInt() * bill.value }

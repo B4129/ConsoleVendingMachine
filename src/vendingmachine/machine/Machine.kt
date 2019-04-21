@@ -1,14 +1,15 @@
 package vendingmachine.machine
 
-import com.example.vendingmachine.announce.Announce
+import com.example.vendingmachine.valueobject.money.Frog
+import vendingmachine.announce.Announce
 import vendingmachine.IMachine
+import vendingmachine.flog.FlogStack
 import vendingmachine.valueobject.drink.Drink
 import vendingmachine.valueobject.Rack
 
 class Machine : IMachine {
 
     private val rack = Rack()
-    // TODO: 2019/04/18  多分良くない
     private val announce = Announce()
     override val calculator = Calculator()
     private var selectDrink: Drink? = null
@@ -16,17 +17,18 @@ class Machine : IMachine {
     override fun onButtonLight() {
         val rightOnDrinks = rack.drinks
         rightOnDrinks.forEach { drink ->
-            if (drink.drink.price.value <= calculator.storage.sumValue()) {
-                announce.say(" ${drink.drink.name.string}のライトが点灯しました")
+            val drinkName = drink.drink.name.string
+            val drinkPrice = drink.drink.price.value
+            val insertMoney = calculator.thisTimeStorage.sumValue()
+            if (drinkPrice <= insertMoney) {
+                announce.say(" ${drinkName}のライトが点灯しました")
             }
         }
-
     }
 
     override fun offButtonLight() {
         announce.say("ライトが消灯しました")
     }
-
 
     override fun onButtonClick(): Boolean {
         val isNotEnoughMoney = checkInsertMoney()
@@ -35,7 +37,6 @@ class Machine : IMachine {
 
         val isChangedStock = changeStock()
         if (isChangedStock) {
-            //お釣りを出す
             calculator.outputMoney(selectDrink!!.price.value)
             return true
         }
@@ -49,7 +50,6 @@ class Machine : IMachine {
         }
         return false
     }
-
 
     private fun changeStock(): Boolean {
         var changedStock = false
@@ -87,7 +87,6 @@ class Machine : IMachine {
             val insertMoney = calculator.thisTimeStorage.sumValue()
             announce.say("商品を選んでください(投入金額:${insertMoney}円)")
 
-
             for (drink in rack.drinks) {
                 val drinkName = drink.drink.name.string
                 val drinkPrice = drink.drink.price.value
@@ -100,6 +99,6 @@ class Machine : IMachine {
 
             if (isFoundButton) break
         }
-            onButtonClick()
+        onButtonClick()
     }
 }

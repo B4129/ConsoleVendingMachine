@@ -1,5 +1,6 @@
-package com.example.vendingmachine.valueobject.drink
+package vendingmachine.valueobject
 
+import com.example.vendingmachine.valueobject.drink.Type
 import vendingmachine.valueobject.drink.*
 
 interface IDrink {
@@ -8,5 +9,5 @@ interface IDrink {
     val price: Price
     val amount: Amount
     val size: Size
-    val type:Type
+    val type: Type
 }
