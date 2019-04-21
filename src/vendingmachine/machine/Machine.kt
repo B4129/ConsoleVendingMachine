@@ -29,16 +29,22 @@ class Machine : IMachine {
 
 
     override fun onButtonClick(): Boolean {
+        val isNotEnoughMoney = checkInsertMoney()
+        if (isNotEnoughMoney) return false
         offButtonLight()
+
+        val isChangedStock = changeStock()
+        if (isChangedStock) {
+            //お釣りを出す
+            calculator.outputMoney(selectDrink!!.price.value)
+            return true
+        }
+        return false
+    }
+
+    private fun checkInsertMoney(): Boolean {
         if (calculator.storage.sumValue() < selectDrink!!.price.value) {
             announce.say("金額が不足しています")
-            return false
-        }
-        //在庫処理
-        if (changeStock()) {
-            //お釣りを出す
-            val outputMoney = calculator.outputMoney(selectDrink!!.price.value)
-            announce.say("${outputMoney}円が吐き出されました")
             return true
         }
         return false
@@ -46,12 +52,12 @@ class Machine : IMachine {
 
 
     private fun changeStock(): Boolean {
-        rack.drinks.forEach { item ->
-            if (item.drink == selectDrink) {
-                return minusStock(item.drink)
-            }
-        }
-        return false
+        var changedStock = false
+
+        //rack.drinks.first { it.drink == selectDrink }]
+        //で値が取れる場合はchangedStockをfalseにしてもいいかも
+        rack.drinks.forEach { item -> if (item.drink.name == selectDrink!!.name) changedStock = minusStock(item.drink) }
+        return changedStock
     }
 
     private fun minusStock(drink: Drink): Boolean {
@@ -78,17 +84,22 @@ class Machine : IMachine {
     fun selectItem() {
         var isFoundButton: Boolean
         while (true) {
-            announce.say("商品を選んでください")
+            val insertMoney = calculator.thisTimeStorage.sumValue()
+            announce.say("商品を選んでください(投入金額:${insertMoney}円)")
+
 
             for (drink in rack.drinks) {
-                announce.say("${drink.drink.name.string} 番号:${drink.position.number}")
+                val drinkName = drink.drink.name.string
+                val drinkPrice = drink.drink.price.value
+                val drinkNumber = drink.position.number
+                announce.say("$drinkName(${drinkPrice}円) 番号:$drinkNumber")
             }
             val selectPositionNumber = readLine()!!.toInt()
 
             isFoundButton = buttonExist(selectPositionNumber)
 
-            if (!isFoundButton) return
-            if (onButtonClick()) return
+            if (isFoundButton) break
         }
+            onButtonClick()
     }
 }

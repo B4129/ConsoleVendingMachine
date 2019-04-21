@@ -8,7 +8,7 @@ import vendingmachine.valueobject.wallet.Storage
 class Calculator {
 
     val storage = Storage()
-    private val thisTimeStorage = Storage()
+    val thisTimeStorage = Storage()
     // TODO: 2019/04/18 Sakai_Yuji 多分良くない
     private val announce = Announce()
 
@@ -62,11 +62,9 @@ class Calculator {
         return false
     }
 
-    fun outputMoney(drinkPrice: Int): Int {
-        val outMoney = storage.sumValue() - drinkPrice
+    fun outputMoney(drinkPrice: Int) {
         putMoneyFromStorage(drinkPrice)
         destroyThisMoney()
-        return outMoney
     }
 
     private fun destroyThisMoney() {
@@ -76,26 +74,35 @@ class Calculator {
     private fun putMoneyFromStorage(drinkPrice: Int) {
         val billList = storage.bills.list
         val coinList = storage.coins.list
-        putFromStorage(drinkPrice, billList)
-        putFromStorage(drinkPrice, coinList)
+        var realPutMoney = 0
+        realPutMoney += putFromStorage(drinkPrice, billList)
+        realPutMoney += putFromStorage(drinkPrice, coinList)
+        val putSumMoney = thisTimeStorage.sumValue() - drinkPrice
+        if (realPutMoney < putSumMoney) announce.say("合計${putSumMoney}円吐き出す予定でしたが在庫が無かったため")
+        announce.say("合計${realPutMoney}円を吐き出しました")
     }
 
-    private fun putFromStorage(drinkPrice: Int, moneyList: MutableMap<String, Int>) {
+    private fun putFromStorage(drinkPrice: Int, moneyList: MutableMap<String, Int>): Int {
         val putSumMoney = thisTimeStorage.sumValue() - drinkPrice
-        var yen:String
+        var realPutMoney = 0
         moneyList.forEach {
-            yen = it.key
-            //機械内にお釣りとなる紙幣/硬貨が存在する場合大きいものから出す
-            while(true){
-                if (yen.toInt() <= 0) {
+            val yen = it.key
+            //機械内にお釣りとなる紙幣/硬貨が存在する場合吐き出す
+            while (realPutMoney < putSumMoney) {
+                if (moneyList[yen]!! <= 0) {
                     announce.say("${yen}円は機械の中に存在しません")
                     break
                 }
                 val putMoney = moneyList[yen]
-                if (putSumMoney / yen.toInt() >= 1) moneyList[yen] = putMoney!! -  1
+                if ((putSumMoney / yen.toInt()) < 1) break
+                moneyList[yen] = putMoney!! - 1
+                realPutMoney += yen.toInt()
+                announce.say("${yen}円を吐き出しました")
+                if ((putSumMoney / yen.toInt()) == 1) break
             }
-
-
         }
+        return realPutMoney
     }
+
+
 }

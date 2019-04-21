@@ -31,8 +31,11 @@ fun main() {
             3 -> machine.calculator.insertMoney(Frog())
             else -> isEnd = !isEnd
         }
+
     }
     machine.selectItem()
+    announce.say("おわり")
+
 
 
 
