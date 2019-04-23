@@ -1,9 +1,10 @@
 package vendingmachine.announce
 
+import vendingmachine.machine.IAnnounce
 
 
-class Announce {
-    fun say(message:String){
+class Announce: IAnnounce {
+    override fun say(message:String){
         println(message)
     }
 }
